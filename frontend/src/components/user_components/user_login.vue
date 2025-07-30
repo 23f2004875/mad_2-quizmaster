@@ -11,7 +11,7 @@
           <button type="submit" class="btn btn-primary">Login</button>
         </form>
         <p class="signup-link">Don't have an account? <router-link to="/register">Sign Up</router-link></p>
-        <p class="signup-link">Admin ?  <router-link to="/admin_login">Admin Login</router-link></p>
+        <p class="signup-link">Admin   <router-link to="/admin_login">Admin Login</router-link></p>
       </div>
     </div>
   </template>
@@ -68,7 +68,7 @@
       justify-content: flex-end;
       align-items: center;
       height: 100vh;
-      background-image:url('@/assets/login.jpg'); 
+      background-image:url('@/assets/lo.jpg'); 
       background-size: cover;
       background-position: center; 
         }

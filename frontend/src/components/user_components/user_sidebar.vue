@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Sidebar -->
     <div :class="['sidebar', { open: isSidebarOpen }]" 
          @mouseover="isSidebarOpen = true" 
          @mouseleave="isSidebarOpen = false">
@@ -32,7 +31,6 @@
       </a>
     </div>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <span class="navbar-brand">Welcome, {{ user.username || 'Guest' }}</span>
@@ -91,7 +89,6 @@ export default {
 </script>
 
 <style>
-/* Sidebar */
 .sidebar {
   width: 60px;
   transition: width 0.3s ease-in-out;
@@ -141,7 +138,6 @@ export default {
   font-size: 18px;
 }
 
-/* Navbar */
 .navbar {
   margin-left: 60px;
   width: calc(100% - 60px);

@@ -1,7 +1,7 @@
 from flask import Flask,request,jsonify ,send_from_directory, send_file
 from backend.models import User , Subject , Chapter , Quiz ,Questions,Scores
-from flask_jwt_extended import create_access_token ,get_jwt,JWTManager
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import create_access_token ,get_jwt,JWTManager,get_jwt_identity,jwt_required
+from sqlalchemy.exc import IntegrityError
 from backend import app,db
 from werkzeug.utils import secure_filename
 from datetime import datetime,timedelta
@@ -72,7 +72,7 @@ def admin_login():
     )
     return {"access_token": token}, 200
 
-@cache.cached(timeout=50, key_prefix=lambda: f"user:{get_jwt_identity()}")
+# @cache.cached(timeout=10, key_prefix=lambda: f"user:{get_jwt_identity()}")
 @app.route("/admin_dashboard",methods=["GET"])
 # @cache.memoize(timeout=50)
 @jwt_required()
@@ -109,37 +109,36 @@ def get_subject_details(subject_id):
     }), 200
 
 @app.route("/subject_create", methods=["POST"])
-@jwt_required()
 def subject_create():
-    data = request.form
-    if "name" not in data or "description" not in data:
-        return jsonify({"message": "Missing required fields"}), 400   
+    name = request.form.get("name")
+    description = request.form.get("description")
+    image = request.files.get("image")
 
-    name = data.get("name")
-    description = data.get("description")
+    if not name or not description or not image:
+        return jsonify({"message": "Missing required fields"}), 400
 
-    existing_subject = Subject.query.filter_by(name=name).first()
-    if existing_subject:
-        return jsonify({"message": "Subject already exists"}), 400
+    filename = secure_filename(image.filename)
 
-    image_url = "/static/images/subjects/default.png"  
-    if "image" in request.files:
-        file = request.files["image"]
-        if file and file.filename and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    image_dir = os.path.join("backend", "static", "images", "subjects")
+    os.makedirs(image_dir, exist_ok=True)
+    image_path = os.path.join(image_dir, filename)
+    image.save(image_path)
 
-            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    image_url = f"/static/images/subjects/{filename}"
 
-            file.save(filepath)
-
-            image_url = f"/static/images/subjects/{filename}"  
-
-    subject = Subject(name=name, description=description, image_url=image_url)
-    db.session.add(subject)
+    new_subject = Subject(
+        name=name,
+        description=description,
+        image_url=image_url
+        )
+    db.session.add(new_subject)
     db.session.commit()
 
-    return jsonify({"message": "Subject created", "id": subject.id, "image_url": image_url}), 200
+    return jsonify({
+            "message": "Subject created successfully",
+            "id": new_subject.id,
+            "image_url": image_url
+        }), 200
 
 @app.route("/subject_update", methods=["POST"])
 @jwt_required()
@@ -245,7 +244,6 @@ def chapter_delete():
         return jsonify({"message": "Error: Unable to delete chapter due to associated quizzes."}), 500
   
 @app.route("/admin/subject/<int:subject_id>/chapter/<int:chapter_id>", methods=["GET"])
-@cache.memoize(timeout=50)
 @jwt_required()
 def get_chapter_data(subject_id, chapter_id):
     subject = Subject.query.get(subject_id)
@@ -263,7 +261,6 @@ def get_chapter_data(subject_id, chapter_id):
     })
 
 @app.route("/admin/subject/<int:subject_id>/chapter/<int:chapter_id>/quiz/<int:quiz_id>", methods=["GET"])
-@cache.memoize(timeout=50)
 @jwt_required()
 def get_quiz_with_questions(subject_id, chapter_id, quiz_id):
     subject = Subject.query.get(subject_id)
@@ -449,7 +446,6 @@ def search_subjects():
     return jsonify({'subjects': data}), 200
 
 @app.route('/admin/quiz_mgmt', methods=['GET'])
-@cache.memoize(timeout=50)
 @jwt_required()
 def get_quizzes():
     try:

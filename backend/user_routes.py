@@ -98,7 +98,6 @@ def register():
     return jsonify({'message': 'Registration successful'}), 201
 
 @app.route("/user_dashboard", methods=["GET"])
-@cache.memoize(timeout=10)
 @jwt_required()
 def user_dashboard():
     email = get_jwt_identity()
@@ -152,7 +151,7 @@ def get_quiz_questions(quiz_id):
     return jsonify([q.to_json() for q in questions]), 200
 
 @app.route('/user/scores/<int:quiz_id>', methods=['GET'])
-@cache.memoize(timeout=60)
+@cache.memoize(timeout=10)
 @jwt_required()
 def get_user_score(quiz_id):
     email = get_jwt_identity()
@@ -324,14 +323,13 @@ def get_all_quizzes():
     return jsonify({"quizzes": quiz_list})
 
 @app.route("/user/subjects", methods=["GET"])
-@cache.memoize(timeout=60)
+@cache.memoize(timeout=10)
 @jwt_required()
 def get_subjects():
     subjects = Subject.query.all()
     return jsonify([s.to_json() for s in subjects]),200
 
 @app.route("/user/subject/<int:subject_id>/chapters", methods=["GET"])
-@cache.memoize(timeout=60)
 @jwt_required()
 def get_subject_chapters(subject_id):
     subject = Subject.query.get(subject_id)

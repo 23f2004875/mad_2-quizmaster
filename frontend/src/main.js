@@ -37,7 +37,6 @@ import missedscore from '@/components/user_components/missedscore.vue';
 
 Vue.use(VueRouter);
 
-// Route definitions
 const routes = [
   { path: '/', component: index },
   { path: '/admin_login', component: admin_login },

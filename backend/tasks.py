@@ -249,8 +249,8 @@ def monthly_report():
                 <li><strong>Total Quizzes Attempted:</strong> {total_attempted}</li>
                 <li><strong>Average Score:</strong> {average_score:.2f}%</li>
                 <li><strong>Best Category:</strong> {top_category}</li>
-                <li><strong>✅ Correct Answers:</strong> {correct_answers}</li>
-                <li><strong>❌ Incorrect Answers:</strong> {incorrect_answers}</li>
+                <li><strong>Correct Answers:</strong> {correct_answers}</li>
+                <li><strong>Incorrect Answers:</strong> {incorrect_answers}</li>
             </ul>
 
             <h3>📊 Subject-wise Performance</h3>

@@ -126,12 +126,12 @@ export default {
       }
     },
     getSubjectImage(subject) {
-  // fallback to default image
+
   if (!subject || !subject.image_url) return 'http://127.0.0.1:8080/static/images/subjects/default.png';
   return `http://127.0.0.1:8080${subject.image_url}`;
 },
   handleImageError(event) {
-    event.target.onerror = null; // Prevent infinite loop
+    event.target.onerror = null; 
     event.target.src = '/images/subjects/default.png';
   },
     searchSubjects() {
@@ -178,11 +178,18 @@ export default {
     formData.append("image", this.newSubject.image);
   }
 
+  console.log("=== FormData being sent ===");
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}:`, value);
+  }
+  console.log("===========================");
+
   try {
-    const response = await fetch("http://127.0.0.1:8080/subject_create", {
+    const response = await window.fetch("http://127.0.0.1:8080/subject_create", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("JWTToken")}`,
+     
       },
       body: formData,
     });
@@ -191,21 +198,21 @@ export default {
 
     if (response.ok) {
       alert("Subject created successfully!");
-      this.subjects.push({
-        id: result.id,
-        name: this.newSubject.name,
-        description: this.newSubject.description,
-        image_url: result.image_url || '/static/images/subjects/default.png'
-      });
-      this.displayedSubjects = [...this.subjects];
-      this.closeCreateModal();
+      console.log("Subject create result:", result);
+      await this.fetch_data(); 
+this.displayedSubjects = [...this.subjects];
+this.closeCreateModal();
+
     } else {
       alert("Error: " + result.message);
     }
   } catch (error) {
+    console.error("Error during subject creation:", error);
     alert("An error occurred while creating the subject.");
   }
 }
+
+
   }
 };
 </script>

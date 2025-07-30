@@ -71,7 +71,7 @@ export default {
   justify-content: flex-end;
   align-items: center;
   height: 100vh;
-  background-image: url('@/assets/login.jpg');
+  background-image: url('@/assets/lo.jpg');
   background-size: cover; 
   background-position: center;
   background-repeat: no-repeat;
