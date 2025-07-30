@@ -1,0 +1,4 @@
+{
+  "python.pythonPath": "venv/bin/python"
+}
+// # This tells VS Code to automatically use the Python interpreter from your virtual environment (venv) next time
