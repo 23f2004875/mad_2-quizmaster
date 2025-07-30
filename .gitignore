@@ -1,1 +1,27 @@
-node_modules
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+venv/
+
+# Environment variables
+.env
+
+# VSCode or IDE settings
+.vscode/
+.idea/
+
+# Mac system files
+.DS_Store
+
+# Log files
+*.log
+
+# Test coverage
+htmlcov/
+.coverage
+.cache/
+.pytest_cache/
+source/venv/
