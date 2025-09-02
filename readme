@@ -1,0 +1,116 @@
+Quiz Master - V2
+
+Modern Application Development II Project
+
+Quiz Master is a multi-user exam preparation web application. It provides role-based access where the admin (Quiz Master) manages subjects, chapters, quizzes, and questions, while users can register, attempt quizzes, and track their performance.
+
+Features
+Admin (Quiz Master)
+
+Predefined admin account (no registration required)
+
+Create, edit, delete subjects and chapters
+
+Add quizzes with multiple-choice questions (single correct option)
+
+Manage users and view performance statistics
+
+Search subjects, quizzes, and users
+
+Export quiz/user reports as CSV
+
+Dashboard with summary charts
+
+User
+
+Register and login securely
+
+Choose subject/chapter and attempt quizzes
+
+Timer-based quizzes with automatic submission
+
+View scores and past attempts
+
+Download/export quiz history
+
+Receive daily reminders for new quizzes or inactivity
+
+Monthly performance report via email
+
+Technology Stack
+
+Backend: Flask (Python)
+
+Database: SQLite
+
+Frontend: Vue.js, Bootstrap
+
+Templates: Jinja2 (entry point only)
+
+Caching: Redis
+
+Asynchronous Jobs: Redis + Celery
+
+Charts: Chart.js
+
+Project Structure
+quizmaster/
+│── backend/          # Flask API & models , Celery tasks (reminders, reports, exports) ,SQLite database & migrations , static for storing image
+│── frontend/         # Vue.js UI
+│── exports/           #   Monthly reports files
+│── README.md         # Project documentation
+
+Core Functionalities
+
+Role-based access control (Admin and User)
+
+Authentication using session or JWT tokens
+
+Quiz creation and management with MCQs
+
+User participation and scoring with historical tracking
+
+Dashboard with performance summaries and charts
+
+Scheduled tasks:
+
+Daily reminders for users
+
+Monthly activity reports via email
+
+CSV export for quiz data
+
+Performance optimization with caching
+
+Database Schema (Simplified)
+
+User
+
+id, username (email), password, full_name, qualification, dob
+
+Subject
+
+id, name, description
+
+Chapter
+
+id, name, description, subject_id
+
+Quiz
+
+id, chapter_id, date_of_quiz, time_duration, remarks
+
+Question
+
+id, quiz_id, question_statement, option1 … optionN, correct_option
+
+Score
+
+id, quiz_id, user_id, timestamp, score
+Notes
+
+Only one admin exists, preloaded in the database.
+
+Database must be initialized programmatically (no manual DB creation).
+
+Wireframe provided in the project statement is for flow guidance; frontend design may vary.
